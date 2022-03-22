@@ -1,0 +1,72 @@
+<!--{% load static %}-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">-->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <h2 class="border-bottom py-2">{{ user.user_name }}</h2>
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;">{{ user.email }}</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge badge-light p-2">
+                    {{ user.create_date }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <h5 class="border-bottom my-3 py-2">{{user.answer_set.count}}개의 요청사항이 있습니다.</h5>
+    {% for content in user.answer_set.all %}
+    <div class="card my-3">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;">{{ content.content }}</div>
+            <div class="d-flex justify-content-end">
+                <div class="badge badge-light p-2">
+                    {{ content.create_date }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <form action="{% url 'web:content_create' user.id %}" method="post" class="my-3">
+        {% csrf_token %}
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+        {% for field in form %}
+            {% if field.errors %}
+            <strong>{{ field.label }}</strong>
+            {{ field.errors }}
+            {% endif %}
+        {% endfor %}
+        </div>
+        {% endif %}
+        <div class="form-group">
+            <textarea name="content" id="content" class="form-control" rows="10"></textarea>
+        </div>
+        <input type="submit" value="요청사항" class="btn btn-primary">
+    </form>
+</div>
+{% endblock %}
+
+
+<!--{% load static %}-->
+<!--<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">-->
+<!--<h1>{{ user.user_name }}</h1>-->
+
+<!--<div>-->
+<!--    {{ user.email }}-->
+<!--</div>-->
+
+<!--<h5>{{ user.answer_set.count }}개의 요청사항이 있습니다.</h5>-->
+<!--<div>-->
+<!--    <ul>-->
+<!--    {% for content in user.answer_set.all %}-->
+<!--        <li>{{ content.content }}</li>-->
+<!--    {% endfor %}-->
+<!--    </ul>-->
+<!--</div>-->
+
+<!--<form action="{% url 'web:content_create' user.id %}" method="post">-->
+<!--{% csrf_token %}-->
+<!--<textarea name="content" id="content" rows="15"></textarea>-->
+<!--<input type="submit" value="요청사항">-->
+<!--</form>-->
